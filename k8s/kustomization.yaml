@@ -8,4 +8,4 @@ resources:
 images:
 - name: goserver
   newName: joseaugustoalmeida/gitops
-  newTag: .sha
+  newTag: newTag
