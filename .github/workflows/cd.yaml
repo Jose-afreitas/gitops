@@ -1,4 +1,4 @@
-name: CDgitOps
+name: CDGitOps
 
 on:
   push:
@@ -6,41 +6,41 @@ on:
 
 jobs:
   build:
-    name: build
+    name: Build
     runs-on: ubuntu-latest
 
     steps:
-      - name: checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: build and push image to dockerhub
-        uses: docker/build-push-action@v1.1.0
-        with:
-          username: ${{secrets.DOCKER_USERNAME}}
-          password: ${{secrets.DOCKER_PASSWORD}}
-          repository: ${{secrets.DOCKER_USERNAME}}/gitops
-          tags: ${{github.sha}}, latest
+    - name: Build and push image to Dockerhub
+      uses: docker/build-push-action@v1.1.0
+      with:
+        username: ${{secrets.DOCKER_USERNAME}}
+        password: ${{secrets.DOCKER_PASSWORD}}
+        repository: ${{secrets.DOCKER_USERNAME}}/gitops
+        tags: ${{github.sha}}, latest
 
-      - name: Setup kustomize
-        uses: imranismail/setup-kustomize@v1
-        with:
-          kustomize-version: "3.6.1"
+    - name: Setup kustomize
+      uses: imranismail/setup-kustomize@v1
+      with:
+        kustomize-version: "3.6.1"
 
-      - name: update kubernets resouces
-        env:
-          DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
-        run: |
-          cd k8s
-          kustomize edit set image goserver=$DOCKER_USERNAME/gitops:$github.sha
+    - name: Update kubernets resouces
+      env:
+        DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
+      run: |
+        cd k8s
+        kustomize edit set image goserver=$DOCKER_USERNAME/gitops:$GITHUB_SHA
 
-      - name: Commit
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git commit -am ":bricks: ci: Bump docker version"
+    - name: Commit
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git commit -am ":bricks: ci: Bump docker version"
 
-      - name: Push
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          repository: Jose-afreitas/gitops
+    - name: Push
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        repository: Jose-afreitas/gitops
