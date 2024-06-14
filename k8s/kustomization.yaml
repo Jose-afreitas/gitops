@@ -8,4 +8,4 @@ resources:
 images:
 - name: goserver
   newName: joseaugustoalmeida/gitops
-  newTag: 7604377a7b0cc212789ff7b2a0f5ac6676ee1291
+  newTag: ddebffd8a9e4824c809130de9f2c2f3c55c4f36e
